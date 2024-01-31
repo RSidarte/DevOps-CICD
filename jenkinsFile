@@ -1,0 +1,31 @@
+pipeline {
+    agent {
+        label 'Jenkins-Agent'
+    }
+    tools {
+        maven 'Maven3'
+        jdk 'Java17'
+    }
+    stages {
+        stage('CleanUp workspace') {
+            steps {
+                cleanws()
+            }
+        }
+        stage('Checkout from SCM') {
+            steps {
+                git branch: 'master', url: 'https://github.com/RSidarte/DevOps-CICD', credentialsId: 'DevOps-CICD'
+            }
+        }
+        stage('Build Application') {
+            steps {
+                sh "mvn clean package"
+            }
+        }
+        stage('Test Application') {
+            steps {
+                sh "mvn test"
+            }
+        }
+    }
+}
